@@ -60,23 +60,24 @@ This should create the file under `iGet/target` called `iGet-jar-with-dependenci
 
 This next step is heavily reliant on which browser you use to access Instagram.
 
-This step will run the program under a GraalVM monitor that will watch the execution of the program so that it can build
-the necessary json config files that are specific to your operating system. This means that we will need to be able to
-run the program with the `watch` option, then when we copy an instagram reel link to your clipboard, you will need to
-see that download happen successfully.
+This step will run the partially compiled program under a GraalVM monitor that will watch the execution of the program
+so that it can build
+the necessary json config files that are specific to your operating system. Those config files are necessary to build
+the final native-image binary file.
+
+What will happen next when you run the next command, is that the jar file we just created will be executed with some key
+command line options that I built into the program to help graalvm figure out the config files. After it starts, you
+will need to tell it which browser you use, then you'll need to copy an instagram link into you clipboard and verify
+that it downloads.
 
 For Windows, I recommend using Chrome, but only AFTER you have modified the shortcut as described in
 the [readme](../README.md) under the *Operating System Notes*.
 
-For Linux / Ubuntu, you should be using Firefox
+For MacOS, using Chrome will work fine, no changes needed.
 
-For MacOS, using Chrome will work fine.
+For Linux / Ubuntu, you should be using Firefox.
 
-Launch your browser and go to instagram.com and log into your Instagram account. Next, find a reel. If clicking on reel
-on the left side of the screen doesn't work for you, then just find a content creator and from their page, click on
-Reels then click on one of their reels.
-
-After that, go into your terminal (cmd window) and type:
+Go into your terminal (cmd window) and type:
 
 * Windows
 
@@ -90,11 +91,16 @@ After that, go into your terminal (cmd window) and type:
   ./graal.sh
   ```
 
-You will see it do some things, but then it will ask you which browser you're using. type 1 for Chrome if that's what
-you're using. If you are using Firefox, then type 4 and hit enter. It will then ask you if you want it to locate your
+You will see it do some things, and it might ask you to confirm the download folder. Just accept the default you can
+change it later.
+
+Next, it will ask you which browser you're using. type 1 for Chrome if that's what
+you're using.
+
+If you are using Firefox, then type 4 and hit enter. It will then ask you if you want it to locate your
 history file for you, just type `Y` and hit enter.
 
-You will see it do things like updating `yt-dlp` ... give it some time.
+You will then see it do things like updating `yt-dlp` ... give it some time.
 
 The next thing you should see will look like this:
 
@@ -105,8 +111,12 @@ Watching Clipboard - Ctrl+C to exit
 And **THAT'S ALL YOU SHOULD SEE**. If you see a command prompt show up after that, then something went wrong. Open an
 issue and lets talk about it.
 
-Next, go to your browser and highlight all of the text in the url field, then RIGHT CLICK on it and select copy. The
-text should look something like this:
+Launch your browser and go to instagram.com and log into your Instagram account. Next, find a reel. If clicking on reel
+on the left side of the screen doesn't work for you, then just find a content creator and from their page, click on
+Reels then click on one of their reels.
+
+After you've clicked on a reel, the video should pop up in your browser and start playing. We want the text in the URL
+field, so highlight all of that text, then RIGHT CLICK on it and select copy. The text should look something like this:
 
 ```azure
 https://www.instagram.com/reel/C6RT4CKyl2O/
@@ -123,7 +133,8 @@ Success: https://www.instagram.com/reel/C6RT4CKyl2O/?utm_source=ig_embed
 If the Downloading line doesn't show up right away for some reason, click on the Terminal window to make it active, then
 click on the web browser to make it active and copy the text to the clipboard again.
 
-It might take a few seconds to download. After you see `Success`, click in the Terminal window and hit `ctrl+c` to stop
+It might take a few seconds to download the video. After you see `Success`, click in the Terminal window and
+hit `ctrl+c` to stop
 the program (Windows will need to say Yes to terminating the batch).
 
 Next, type:

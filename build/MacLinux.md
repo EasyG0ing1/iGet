@@ -51,4 +51,22 @@ Default locale: en_US, platform encoding: UTF-8
 OS name: "mac os x", version: "14.4.1", arch: "x86_64", family: "mac"
 ```
 
+Finally, you need to install the C++ compiler for linux and for Mac you need to install the xcode tools.
+
+### Linux
+
+```bash
+sudo apt install build-essential -y
+```
+
+This won't take long at all.
+
+### Mac
+
+```bash
+xcode-select --install
+```
+
+This will take a while.
+
 Go back to the [Main Instructions](./environment.md) and read from the section entitled **First**
