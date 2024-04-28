@@ -9,6 +9,8 @@ and hit enter.
 Next, install `SDKMan`
 
 ```bash
+sudo apt install curl -y
+sudo apt install zip -y
 curl -s "https://get.sdkman.io" | bash
 ```
 
