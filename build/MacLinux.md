@@ -13,6 +13,7 @@ Next, make sure you have curl and zip installed
   sudo apt install curl -y
   sudo apt install zip -y
   sudo apt install git -y
+  sudo apt install zlib1g-dev -y
   ```
   * Mac
 

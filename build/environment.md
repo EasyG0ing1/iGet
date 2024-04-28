@@ -13,9 +13,7 @@ Click on your operating system to see how to set up the build environment:
 
 [Windows](./Windows.md)
 
-[MacOS](./MacLinux.md)
-
-[Linux](./MacLinux.md)
+[MacOS / Linux](./MacLinux.md)
 
 ## First
 
@@ -144,14 +142,26 @@ fast your CPU is. On a Macbook Pro 2019 with 32 gigs of ram, the process takes j
 on that same laptop, it takes just under two minutes. But on a slower ESXi server that I have it can take almost seven
 minutes ... just be patient!
 
-Once it is finished, you should find the binary in the `iget/target` folder and it will be named `iget.exe` in Windows
+Once it is finished, you should find the binary in the `target` folder and it will be named `iget.exe` in Windows
 or just `iget` in Mac / Linux.
+
+* Windows
+
+  ```bash
+  cd C:\github\iget
+  ```
+
+* Mac / Linux
+
+  ```bash
+  cd ~/github/iget
+  ```
 
 You will know that the binary works when you can run it with the `watch` option
 
 ```bash
-iget/target/iget.exe watch
-iget/target/iget watch
+target\iget.exe watch
+target/iget watch
 ```
 
 and you should only see this line without being kicked back to a command prompt:
@@ -160,10 +170,12 @@ and you should only see this line without being kicked back to a command prompt:
 Watching Clipboard - Ctrl+C to exit
 ```
 
-Move the binary to a folder that is in your PATH environment variable so that it will run from anywhere you type the
-command.
+**Move the binary to a folder that is in your PATH environment variable so that it will run from anywhere when you type
+the command. Make sure it is NOT anywhere under the github folder because we're going to delete that folder for cleanup.
+You might want to copy it to your desktop for the time being until you figure out where you want to keep it permanently.
+**
 
-# CLEANUP
+# CLEAN UP
 
 ## Windows
 
@@ -175,10 +187,20 @@ remove graal, maven, and the github clone / source files by simply typing:
 cd C:\
 rd /s /q C:\graalvm
 rd /s /q C:\github
-rd /s /q %USERHOME%\.m2
+rd /s /q %HOMEPATH%\.m2
+del %HOMEPATH%\Downloads\apache*.zip
+del %HOMEPATH%\Downloads\Git*.exe
+del %HOMEPATH%\Downloads\graalvm*.zip
 ```
 
-Then you can delete the zip files you downloaded in your Downloads folder.
+To remove the Visual Studio build tools, hit the Windows key and type in `add` you will see `Add or Remove Programs`
+open it up, then look for `Microsoft Visual Studio Installer` and click `Uninstall` and follow the prompts to uninstall
+it.
+
+It will remove the various options that you installed and then will remove itself once all of those have been removed.
+
+DO NOT uninstall anything else such as the Microsoft Visual C++ installation as those are needed for other Windows
+programs. Just uninstall the Visual Studio Installer.
 
 ## MacOS and Linux
 
@@ -226,10 +248,10 @@ lines are deleted, save and exit by typing `ctrl+x` then `y` then `<enter>`
 Next, you can remove the relevant folders:
 
 ```bash
-rm -R ~/.sdkman
-rm -R ~/maven
-rm -R ~/github
-rm -R ~/.m2
+sudo rm -R ~/.sdkman
+sudo rm -R ~/maven
+sudo rm -R ~/github
+sudo rm -R ~/.m2
 ```
 
 Close Terminal and open it back up.
