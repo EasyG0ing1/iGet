@@ -24,7 +24,7 @@ Variables
 
 Next, you will need to create a new System environment variable named `JAVA_HOME`
 
-[<img src="img/Win2.png" width="50%">]()
+[<img src="img/Win21.png" width="50%">]()
 
 The path needs to be the path that you extracted the graalvm zip file and it should look similar to whats in the picture
 above.
