@@ -32,8 +32,6 @@ your clipboard. With each successive link you copy into your clipboard it gets a
 
 ## Installation
 
-### Installation
-
 Download the appropriate binary [from here](https://github.com/EasyG0ing1/iGet/releases/latest) and place it in a folder
 that is in your PATH environment variable.
 
