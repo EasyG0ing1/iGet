@@ -1,4 +1,4 @@
-[<img src="img/LogoiGet.png" width="55%">]()
+[<img src="img/LogoiGet.png" width="35%">]()
 
 # Intro
 
