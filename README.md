@@ -32,13 +32,11 @@ your clipboard. With each successive link you copy into your clipboard it gets a
 
 ## Installation
 
-### Linux
+### Installation
 
-Download the .zip file from the releases page, unzip it then install it:
+Download the appropriate binary [from here](https://github.com/EasyG0ing1/iGet/releases/latest) and place it in a folder
+that is in your PATH environment variable.
 
- ```bash
- sudo dpkg -i iget.deb
- ```
 
 ### Setup
 
