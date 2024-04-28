@@ -23,40 +23,28 @@ Clone the repository to your local drive:
 
 ```bash
 git clone https://github.com/EasyG0ing1/iget.git
-cd iGet
+cd iget
 ```
 
-* If you don't have the git command
-  * Windows users [click here](./gitwindows.md)
+### MacOS or Linux
 
-  * Mac and Linux users just need to install via your package manager
+```bash
+cd ~/github/iget/build/maclinux
+chmod +x *.sh
+./buildjar.sh
+```
 
-    ```bash
-    sudo apt install git -y (linux)
-    brew install git (mac)
-    ```
+### Windows
 
-## Next
-
-* MacOS or Linux
-
-    ```bash
-    cd ~/github/iGet/build/maclinux
-    chmod +x *.sh
-    ./buildjar.sh
-    ```
-
-* Windows
-
-    ```bash
-    cd C:\github\iGet\build\windows
-    buildjar.bat
-    ```
+```bash
+cd C:\github\iget\build\windows
+buildjar.bat
+```
 
 You're going to see A LOT of stuff downloaded by maven. It's ok, it goes into a folder named `.m2` in your home folder.
 We'll delete it when we're done.
 
-This should create the file under `iGet/target` called `iGet-jar-with-dependencies.jar`
+This should create the file under `iget/target` called `iGet-jar-with-dependencies.jar`
 
 This next step is heavily reliant on which browser you use to access Instagram.
 
@@ -156,14 +144,14 @@ fast your CPU is. On a Macbook Pro 2019 with 32 gigs of ram, the process takes j
 on that same laptop, it takes just under two minutes. But on a slower ESXi server that I have it can take almost seven
 minutes ... just be patient!
 
-Once it is finished, you should find the binary in the `iGet/target` folder and it will be named `iget.exe` in Windows
+Once it is finished, you should find the binary in the `iget/target` folder and it will be named `iget.exe` in Windows
 or just `iget` in Mac / Linux.
 
 You will know that the binary works when you can run it with the `watch` option
 
 ```bash
-iGet/target/iget.exe watch
-iGet/target/iget watch
+iget/target/iget.exe watch
+iget/target/iget watch
 ```
 
 and you should only see this line without being kicked back to a command prompt:

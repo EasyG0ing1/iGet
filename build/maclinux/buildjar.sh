@@ -1,1 +1,1 @@
-mvn -f $HOME/github/iGet/pom.xml clean package
+mvn -f $HOME/github/iget/pom.xml clean package
