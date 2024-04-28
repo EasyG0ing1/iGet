@@ -36,11 +36,6 @@ add a path to the `bin` folder of both GraalVM and Apache Maven and they should 
 
 Click OK a couple of times to get out of those settings.
 
-Next, we need to launch Chrome but only after you have edited the launch shortcut as described in the main README in
-this project.
-
-With Chrome open, go to instagram.com and pull up a reel video.
-
 Now, open a CMD.EXE window. The easiest way to do that is to hold down the Windows key on your keyboard and then
 press `R` then type in `cmd` and hit enter.
 
