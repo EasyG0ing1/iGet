@@ -16,7 +16,8 @@ Extract its contents to the C:\graalvm folder which will give you path similar t
 
 Next, you need to edit the environment variables so that the build tools know where to find Java and Maven.
 
-Right click on This PC and then click on Advanced system settings. Then click on the button that says Environment
+Right click on This PC, Properties, and then click on Advanced system settings. Then click on the button that says
+Environment
 Variables
 
 [<img src="img/Win1.png" width="50%">]()
