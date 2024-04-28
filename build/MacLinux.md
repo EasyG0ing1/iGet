@@ -6,11 +6,24 @@
 We can do all of this from a Terminal window, so open Terminal. You should be in your home folder. If not, type `cd ~`
 and hit enter.
 
+Next, make sure you have curl and zip installed
+
+* Linux
+  ```bash
+  sudo apt install curl -y
+  sudo apt install zip -y
+  ```
+* Mac
+
+  These should be installed by default, but if not then
+  ```bash
+  brew install curl
+  brew install zip
+  ```
+
 Next, install `SDKMan`
 
 ```bash
-sudo apt install curl -y
-sudo apt install zip -y
 curl -s "https://get.sdkman.io" | bash
 ```
 
