@@ -26,20 +26,32 @@ git clone https://github.com/EasyG0ing1/iget.git
 cd iGet
 ```
 
-### MacOS or Linux
+* If you don't have the git command
+  * Windows users [click here](./gitwindows.md)
 
-```bash
-cd ~/github/iGet/build/maclinux
-chmod +x *.sh
-./buildjar.sh
-```
+  * Mac and Linux users just need to install via your package manager
 
-### Windows
+    ```bash
+    sudo apt install git -y (linux)
+    brew install git (mac)
+    ```
 
-```bash
-cd C:\github\iGet\build\windows
-buildjar.bat
-```
+## Next
+
+* MacOS or Linux
+
+    ```bash
+    cd ~/github/iGet/build/maclinux
+    chmod +x *.sh
+    ./buildjar.sh
+    ```
+
+* Windows
+
+    ```bash
+    cd C:\github\iGet\build\windows
+    buildjar.bat
+    ```
 
 This should create the file under `iGet/target` called `iGet-jar-with-dependencies.jar`
 
@@ -63,21 +75,23 @@ Reels then click on one of their reels.
 
 After that, go into your terminal (cmd window) and type:
 
-### Windows
+* Windows
 
-```bash
-graal.bat
-```
+  ```bash
+  graal.bat
+  ```
 
-### MacOS or Linux
+* MacOS or Linux
 
-```bash
-./graal.sh
-```
+  ```bash
+  ./graal.sh
+  ```
 
 You will see it do some things, but then it will ask you which browser you're using. type 1 for Chrome if that's what
 you're using. If you are using Firefox, then type 4 and hit enter. It will then ask you if you want it to locate your
 history file for you, just type `Y` and hit enter.
+
+You will see it do things like updating `yt-dlp` ... give it some time.
 
 The next thing you should see will look like this:
 
@@ -107,21 +121,21 @@ If the Downloading line doesn't show up right away for some reason, click on the
 click on the web browser to make it active and copy the text to the clipboard again.
 
 It might take a few seconds to download. After you see `Success`, click in the Terminal window and hit `ctrl+c` to stop
-the program.
+the program (Windows will need to say Yes to terminating the batch).
 
 Next, type:
 
-### Windows
+* Windows
 
-```bash
-native.bat
-```
+  ```bash
+  native.bat
+  ```
 
-### MacOS / Linux
+* MacOS / Linux
 
-```bash
-./native.sh
-```
+  ```bash
+  ./native.sh
+  ```
 
 Now, this is going to build the native binary and IT WILL TAKE SOME TIME, depending on how much RAM you have and how
 fast your CPU is. On a Macbook Pro 2019 with 32 gigs of ram, the process takes just over a minute. In a virtual machine
