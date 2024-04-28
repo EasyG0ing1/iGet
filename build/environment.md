@@ -53,6 +53,9 @@ cd iGet
     buildjar.bat
     ```
 
+You're going to see A LOT of stuff downloaded by maven. It's ok, it goes into a folder named `.m2` in your home folder.
+We'll delete it when we're done.
+
 This should create the file under `iGet/target` called `iGet-jar-with-dependencies.jar`
 
 This next step is heavily reliant on which browser you use to access Instagram.
@@ -173,6 +176,7 @@ remove graal, maven, and the github clone / source files by simply typing:
 cd C:\
 rd /s /q C:\graalvm
 rd /s /q C:\github
+rd /s /q %USERHOME%\.m2
 ```
 
 Then you can delete the zip files you downloaded in your Downloads folder.
@@ -226,6 +230,7 @@ Next, you can remove the relevant folders:
 rm -R ~/.sdkman
 rm -R ~/maven
 rm -R ~/github
+rm -R ~/.m2
 ```
 
 Close Terminal and open it back up.
