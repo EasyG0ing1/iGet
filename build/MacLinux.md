@@ -12,14 +12,18 @@ Next, make sure you have curl and zip installed
   ```bash
   sudo apt install curl -y
   sudo apt install zip -y
+  sudo apt install git -y
   ```
-* Mac
+  * Mac
 
-  These should be installed by default, but if not then
-  ```bash
-  brew install curl
-  brew install zip
-  ```
+    curl and zip should be installed by default, but if not then install them with homebrew. You can check first to see
+    if they are installed by just typing `curl` and `zip` and pressing enter you should see stuff come back other
+    than `command not found` you might need to install git though.
+    ```bash
+    brew install curl
+    brew install zip
+    brew install git
+    ```
 
 Next, install `SDKMan`
 
