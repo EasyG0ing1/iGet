@@ -1,5 +1,7 @@
 # Build Tools
 
+I have tested these instructions both on a clean install of Windows and Ubuntu Desktop and they work.
+
 I build the native binaries using graalVM
 
 And because of the uniqueness of each operating system and the JNI reflection calls, each operating system has to be
