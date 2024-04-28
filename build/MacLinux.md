@@ -1,5 +1,8 @@
 ## MacOS and Linux Build Environment
 
+* **It is imperative that when doing this from linux that your terminal window should be opened while in your gui. DO
+  NOT do this from a terminal session like ssh**
+
 We can do all of this from a Terminal window, so open Terminal. You should be in your home folder. If not, type `cd ~`
 and hit enter.
 

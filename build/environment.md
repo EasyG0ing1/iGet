@@ -30,9 +30,7 @@ cd iGet
 
 ```bash
 cd ~/github/iGet/build/maclinux
-chmod +x buildjar.sh
-chmod +x graal.sh
-chmod +x native.sh
+chmod +x *.sh
 ./buildjar.sh
 ```
 
@@ -132,6 +130,19 @@ minutes ... just be patient!
 
 Once it is finished, you should find the binary in the `iGet/target` folder and it will be named `iget.exe` in Windows
 or just `iget` in Mac / Linux.
+
+You will know that the binary works when you can run it with the `watch` option
+
+```bash
+iGet/target/iget.exe watch
+iGet/target/iget watch
+```
+
+and you should only see this line without being kicked back to a command prompt:
+
+```bash
+Watching Clipboard - Ctrl+C to exit
+```
 
 Move the binary to a folder that is in your PATH environment variable so that it will run from anywhere you type the
 command.
