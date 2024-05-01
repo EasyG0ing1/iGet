@@ -168,5 +168,8 @@ right.
 
 ## Version History
 
+* 2.1.0
+  * Added check for headless mode in Watch class
+
 * 2.0.0
   * Initial Release

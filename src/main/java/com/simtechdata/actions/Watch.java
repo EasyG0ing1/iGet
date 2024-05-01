@@ -14,6 +14,20 @@ public class Watch {
     private static final List<String> downloadedLinks = new ArrayList<>();
 
     public static void start() {
+
+        if (GraphicsEnvironment.isHeadless()) {
+            String msg = """
+                                        \s
+                     \tYou can only use the watch option when your terminal has been opened
+                     \tfrom within a GUI environment. Currently you are running iget in a
+                     \t"headless" environment. Please open a Terminal window from within your
+                     \tGUI, then run iGet with the watch option.
+                                        \s
+                    \s""";
+            System.out.println(msg);
+            return;
+        }
+
         System.out.println("Watching Clipboard - Ctrl+C to exit");
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
         clearClipboard(Toolkit.getDefaultToolkit().getSystemClipboard());
