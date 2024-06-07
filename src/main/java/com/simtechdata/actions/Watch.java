@@ -12,6 +12,12 @@ import java.util.concurrent.*;
 public class Watch {
 
     private static final List<String> downloadedLinks = new ArrayList<>();
+    private static boolean graal = false;
+
+    public static void startGraal() {
+        graal = true;
+        start();
+    }
 
     public static void start() {
 
@@ -58,6 +64,8 @@ public class Watch {
                                 catch (ExecutionException | InterruptedException ignored) {
                                     System.out.println(STR."Failed: \{link.getLink()}");
                                 }
+                                if (graal)
+                                    System.exit(0);
                             }).start();
                         }
                     }

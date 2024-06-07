@@ -31,6 +31,9 @@ public class DownloadLink implements Callable<Result> {
     }
 
     private String formatLink(String link) {
+        if (link.toLowerCase().contains("youtube") || link.toLowerCase().contains("tu.be")) {
+            return link;
+        }
         if (link.toLowerCase().contains("instagram")) {
             link = link.replace("instagram.com/reels", "instagram.com/reel");
             String[] items = link.replaceFirst("//", "/").split("/");

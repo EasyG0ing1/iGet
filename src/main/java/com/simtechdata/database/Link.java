@@ -34,6 +34,9 @@ public class Link {
     }
 
     private String formatLink(String link) {
+        if (link.toLowerCase().contains("youtube") || link.toLowerCase().contains("tu.be")) {
+            return link;
+        }
         String[] parts = link.replaceFirst("//", "/").split("/");
         int last = parts.length - 1;
         StringBuilder newURL = new StringBuilder(STR."\{parts[0]}//");
@@ -51,7 +54,6 @@ public class Link {
     public String getMonthDayYear() {
         return TimeUtil.toMonthDayYear(timestamp);
     }
-
 
     public void download(boolean retryFailed) {
         new Thread(() -> {

@@ -53,7 +53,7 @@ public class Graal {
             AppSettings.Clear.lastUpdate();
             Folder.copyResourceToFile();
             System.out.println(STR."\{NL}Copy an instagram link to the clipboard and wait for the download to finish then manually stop the program");
-            Watch.start();
+            Watch.startGraal();
         }
         catch (SQLException | IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));

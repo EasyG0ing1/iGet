@@ -52,6 +52,21 @@ public class SQLite {
         return null;
     }
 
+    private static void checkBrowserFiles() {
+        browserHistoryFileExists = browserHistoryFile.exists();
+        historyCopyExists = browserHistoryCopy.exists();
+        if (!browserHistoryFileExists) {
+            System.out.println(STR."Could not find Browser history file. The assumed path is:\{NL}\{browserHistoryFile.getAbsolutePath()}\{NL}");
+            System.out.println("Run iget with the checkBrowser option");
+            System.exit(1);
+        }
+        System.out.println("*".repeat(40));
+        System.out.println(browserHistoryCopy.getAbsolutePath());
+        System.out.println(browserHistoryFile.getAbsolutePath());
+        System.out.println("*".repeat(40));
+        copyHistoryFile();
+    }
+
     private static void copyHistoryFile() {
         /**
          * To help reduce writes on SSD / NVMe drives, we only make a backup copy of
@@ -74,19 +89,6 @@ public class SQLite {
         catch (IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
             throw new RuntimeException(e);
-        }
-    }
-
-    private static void checkBrowserFiles() {
-        browserHistoryFileExists = browserHistoryFile.exists();
-        historyCopyExists = browserHistoryCopy.exists();
-        if (!browserHistoryFileExists) {
-            System.out.println(STR."Could not find Browser history file. The assumed path is:\{NL}\{browserHistoryFile.getAbsolutePath()}\{NL}");
-            System.out.println("Run iget with the checkBrowser option");
-            System.exit(1);
-        }
-        if (!historyCopyExists) {
-            copyHistoryFile();
         }
     }
 

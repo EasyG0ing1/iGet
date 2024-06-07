@@ -45,26 +45,6 @@ public class DB {
         }
     }
 
-    public static Reason addLink(Link link) {
-        boolean linkExists = linkExists(link.getLink());
-        if (linkExists) {
-            return downloadedState(link.getLink()).equals(State.DOWNLOADED) ? DUPLICATE_ENTRY : DOWNLOAD_FAILED;
-        }
-        String SQL = "INSERT INTO Links (Link, State, Timestamp) VALUES (?, ?, ?);";
-        try (Connection conn = getConn();
-             PreparedStatement pst = conn.prepareStatement(SQL)) {
-            pst.setString(1, link.getLink());
-            pst.setString(2, NEW.name());
-            pst.setLong(3, link.getTimestamp());
-            pst.executeUpdate();
-            return ADDED_SUCCESSFULLY;
-        }
-        catch (SQLException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
-        }
-        return FAILED_DATABASE;
-    }
-
     public static Reason addLink(String link, boolean clearDownloadedFlag) {
         boolean linkExists = linkExists(link);
         if (clearDownloadedFlag && linkExists) {
@@ -191,70 +171,36 @@ public class DB {
         return historyList;
     }
 
+    public static LinkedList<Link> searchBrowser(String search) {
+        LinkedList<Link> list = new LinkedList<>();
+        String SQL = STR."SELECT url, last_visit_time as TIME from urls;";
+        try (Connection conn = SQLite.getBrowserConnection();
+             ResultSet rs = conn.createStatement().executeQuery(SQL)) {
+            while (rs.next()) {
+                String url = rs.getString("url");
+                long time = rs.getLong("TIME");
+                Link link = new Link(url, time);
+                if (url.toLowerCase().contains(search.toLowerCase()))
+                    list.addLast(link);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static LinkedList<Link> getBrowserHistory(int hours, boolean includeFailed) {
         Browser browser = Browser.getBrowser();
         LinkedList<Link> list = new LinkedList<>();
         Set<String> dupeList = new HashSet<>();
-        long offsetInSeconds = 978307200;
-        String SQLChrome = "SELECT url as URL, last_visit_time as TIME from urls " +
-                           "WHERE last_visit_time > ? " +
-                           "AND (" +
-                           "   (url NOT LIKE(?) AND url LIKE(?)) " +
-                           "OR (url NOT LIKE(?) AND url LIKE(?)) " +
-                           "OR (url NOT LIKE(?) AND url LIKE(?)) " +
-                           "OR (url NOT LIKE(?) AND url LIKE(?)) " +
-                           "OR url LIKE(?)" +
-                           ") ORDER BY last_visit_time;";
-        String SQLFirefox = "SELECT url as URL, last_visit_date as TIME from moz_places " +
-                            "WHERE last_visit_time > ? " +
-                            "AND (" +
-                            "   (url NOT LIKE(?) AND url LIKE(?)) " +
-                            "OR (url NOT LIKE(?) AND url LIKE(?)) " +
-                            "OR (url NOT LIKE(?) AND url LIKE(?)) " +
-                            "OR (url NOT LIKE(?) AND url LIKE(?)) " +
-                            "OR url LIKE(?)" +
-                            ") ORDER BY last_visit_time;";
-        String SQLSafari = """
-                SELECT
-                    hi.id,
-                    hi.url as URL,
-                    hv.visit_time as TIME
-                FROM
-                    history_items hi
-                        JOIN
-                    history_visits hv ON hi.id = hv.history_item
-                        JOIN
-                    (
-                        SELECT
-                            history_item,
-                            MAX(visit_time) as MaxVisitTime
-                        FROM
-                            history_visits
-                        GROUP BY
-                            history_item
-                    ) latest_visits ON hv.history_item = latest_visits.history_item AND hv.visit_time = latest_visits.MaxVisitTime
-                WHERE hv.visit_time > ? \
-                AND (\
-                   (hi.url NOT LIKE(?) AND hi.url LIKE(?)) \
-                OR (hi.url NOT LIKE(?) AND hi.url LIKE(?)) \
-                OR (hi.url NOT LIKE(?) AND hi.url LIKE(?)) \
-                OR (hi.url NOT LIKE(?) AND hi.url LIKE(?)) \
-                OR hi.url LIKE(?)\
-                ) ORDER BY hv.visit_time;""";
+        long time = convertTimestamp(browser, (hours == -1) ? 0 : hours);
+        String SQL = getSql(browser);
         Connection conn;
-        boolean all = hours == -1;
-        long time = TimeUtil.getTimestampWithOffset(hours, all);
         try {
             conn = SQLite.getBrowserConnection();
             PreparedStatement pst;
-            switch (browser) {
-                case FIREFOX -> pst = conn.prepareStatement(SQLFirefox);
-                case SAFARI -> {
-                    pst = conn.prepareStatement(SQLSafari);
-                    time -= offsetInSeconds;
-                }
-                default -> pst = conn.prepareStatement(SQLChrome);
-            }
+            pst = conn.prepareStatement(SQL);
             pst.setLong(1, time);
             pst.setString(2, "%time%"); //NOT
             pst.setString(3, "%//www.youtube.com%watch%");
@@ -269,7 +215,6 @@ public class DB {
                 while (rs.next()) {
                     String url = rs.getString("URL");
                     State state = downloadedState(url);
-                    System.out.println(STR."State: \{state.name()} for link: \{url}");
                     if (state.equals(NEW) || state.equals(DOES_NOT_EXIST) || (state.equals(FAILED) && includeFailed)) {
                         String[] parts = url.split("/");
                         boolean add = true;
@@ -290,9 +235,82 @@ public class DB {
             }
         }
         catch (SQLException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+            StackTraceElement[] stackTraceElements = e.getStackTrace();
+            for (StackTraceElement stackTraceElement : stackTraceElements) {
+                System.out.println(stackTraceElement.toString());
+            }
         }
         return list;
+    }
+
+    private static String getSql(Browser browser) {
+        String SQL;
+        switch (browser) {
+            case FIREFOX -> SQL = """
+                    SELECT url as URL, last_visit_date as TIME from moz_places
+                    WHERE last_visit_date < ?
+                    AND (
+                        (url NOT LIKE(?) AND url LIKE(?))
+                        OR (url NOT LIKE(?) AND url LIKE(?))
+                        OR (url NOT LIKE(?) AND url LIKE(?))
+                        OR (url NOT LIKE(?) AND url LIKE(?))
+                        OR url LIKE(?)
+                    ) ORDER BY last_visit_date;
+                    """;
+            case SAFARI -> SQL = """
+                    SELECT
+                        hi.id,
+                        hi.url as URL,
+                        hv.visit_time as TIME
+                    FROM
+                        history_items hi
+                            JOIN
+                        history_visits hv ON hi.id = hv.history_item
+                            JOIN
+                        (
+                            SELECT
+                                history_item,
+                                MAX(visit_time) as MaxVisitTime
+                            FROM
+                                history_visits
+                            GROUP BY
+                                history_item
+                        ) latest_visits ON hv.history_item = latest_visits.history_item AND hv.visit_time = latest_visits.MaxVisitTime
+                    WHERE hv.visit_time < ?
+                    AND (
+                       (hi.url NOT LIKE(?) AND hi.url LIKE(?))
+                    OR (hi.url NOT LIKE(?) AND hi.url LIKE(?))
+                    OR (hi.url NOT LIKE(?) AND hi.url LIKE(?))
+                    OR (hi.url NOT LIKE(?) AND hi.url LIKE(?))
+                    OR hi.url LIKE(?)
+                    ) ORDER BY hv.visit_time;
+                    """;
+            default -> SQL = """
+                    SELECT url as URL, last_visit_time as TIME from urls
+                     WHERE last_visit_time < ?
+                     AND (
+                        (url NOT LIKE(?) AND url LIKE(?))
+                     OR (url NOT LIKE(?) AND url LIKE(?))
+                     OR (url NOT LIKE(?) AND url LIKE(?))
+                     OR (url NOT LIKE(?) AND url LIKE(?))
+                     OR url LIKE(?)
+                     ) ORDER BY last_visit_time;
+                    """;
+        }
+        return SQL;
+    }
+
+    private static long convertTimestamp(Browser browser, long hours) {
+        long currentMillis = System.currentTimeMillis();
+        long adjustedMillis = currentMillis - (hours * 60 * 60 * 1000); // Subtract 5 hours
+        long secondsFrom1970To2001 = 978307200;
+        long unixTimeInSeconds = adjustedMillis / 1000; // Convert from milliseconds to seconds
+        long offsetBetweenEpochs = 11644473600000L; // Milliseconds from January 1, 1601 to January 1, 1970
+        return switch (browser) {
+            case FIREFOX -> adjustedMillis * 1000;
+            case SAFARI -> unixTimeInSeconds - secondsFrom1970To2001;
+            default -> (adjustedMillis + offsetBetweenEpochs) * 1000;
+        };
     }
 
     public static boolean remove(Link link) {

@@ -168,6 +168,12 @@ right.
 
 ## Version History
 
+* 2.2.0
+  * Added the `sb` option which allows a search of entire browser history
+  * Fixed problem when copying browser history for offline access
+  * Fixed date issues with different browsers
+  * Fixed safari schema problem with sqlite
+
 * 2.1.0
   * Added check for headless mode in Watch class
 

@@ -53,7 +53,7 @@ public class Main {
                 case "checkbrowser" -> SQLite.checkBrowser();
                 case "setbrowserpath" -> Actions.setBrowserPath();
                 case "setbrowser" -> Actions.setBrowser();
-                case "get" -> {
+                case "get", "g" -> {
                     if (args.length > 1) {
                         Actions.downloadLink(args[1]);
                     }
@@ -77,6 +77,11 @@ public class Main {
                 case "list", "show" -> Actions.showLinks(State.NEW);
                 case "?", "--help" -> showHelp();
                 case "cmds" -> Actions.showCommands();
+                case "sb" -> {
+                    String search = args[1];
+                    Actions.searchBrowser(search);
+                    System.exit(0);
+                }
                 case "history" -> {
                     System.out.println(STR."\{NL}Showing Downloaded Links:\{NL}");
                     Actions.showLinks(State.DOWNLOADED);
@@ -122,8 +127,8 @@ public class Main {
                     (http must begin the link to be recognized as a link)
 
                     Options:
-                      get        - Download links in que
-                      get <url>  - download one URL right now
+                      get        - Download links in que (can also use g)
+                      get <url>  - download one URL right now (can also use g)mac
                       watch      - Watch mode looks for links to show up in clipboard then downloads them
                       setFolder  - Set the folder where downloads get stored
                       setBrowser - Set which browser you use for Instagram (this helps prevent download failures)
@@ -135,6 +140,7 @@ public class Main {
                       remove     - Remove one link from the download list (A menu will be provided)
                       failed     - Show links that failed to download
                       version    - Show iGet version number
+                      sb <word>  - Search browser history for word. Will offer list and selected link will go to clipboard
                       browserHistory - show ALL of the links that are in your browsers history
                       checkBrowser   - Lets you verify that iGet can find the History file for your web browser
                       setBrowserPath - Lets you set the path to the browser History file if the above option does not find it.

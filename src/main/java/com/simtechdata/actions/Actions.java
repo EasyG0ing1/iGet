@@ -8,17 +8,20 @@ import com.simtechdata.enums.State;
 import com.simtechdata.settings.AppSettings;
 import com.simtechdata.settings.Search;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 
 import static com.simtechdata.enums.OS.NL;
-import static com.simtechdata.enums.Reason.DUPLICATE_ENTRY;
 
 public class Actions {
 
@@ -91,6 +94,53 @@ public class Actions {
                 }
             }
         }
+    }
+
+    public static void searchBrowser(String search) {
+        LinkedList<Link> list = DB.searchBrowser(search);
+        if (list.isEmpty()) {
+            System.out.println("\n\tNo Results\n\n");
+            System.exit(0);
+        }
+        StringBuilder sb = new StringBuilder();
+        int places = (list.size() < 10) ? 0 : (list.size() < 100) ? 1 : 2;
+        int count = 1;
+        for (Link link : list) {
+            int clip = Math.min(100, link.getLink().length()) - 1;
+            String url = link.getLink().substring(0, clip);
+            String date = TimeUtil.toMonthDayYear(link.getTimestamp());
+            sb.append(padNumber(count, places)).append(") ").append(url).append(" - ").append(date).append(NL);
+            count++;
+        }
+        sb.append(STR."Chose (\{count} - Quit): ");
+        System.out.print(sb);
+        int choice = new Scanner(System.in).nextInt();
+        if (choice == count) {
+            System.exit(0);
+        }
+        toClipboard(list.get(choice));
+        System.out.println(STR."\{NL}\tLink copied to your clipboard\{NL}");
+    }
+
+    private static void toClipboard(Link link) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection contents = new StringSelection(link.getLink());
+        clipboard.setContents(contents, null);
+    }
+
+
+    private static String padNumber(int number, int places) {
+        String pre = "";
+        if (number < 10) {
+            pre = "0".repeat(places);
+        }
+        else if (number < 100) {
+            pre = "0".repeat(places - 1);
+        }
+        else if (number < 1000) {
+            pre = "0".repeat(places - 2);
+        }
+        return STR."\{pre}\{number}";
     }
 
     public static void downloadLink(String lnk) {
@@ -166,13 +216,9 @@ public class Actions {
     }
 
     public static void showHistory() {
-        System.out.print("Include failed downloads in list? (Y/N): ");
-        String option = new Scanner(System.in).nextLine();
-        boolean includeFailed = option.toLowerCase().contains("y");
-        LinkedList<BrowserHistory> historyList = DB.getBrowserHistoryDates(includeFailed);
-        boolean retryFailed = false;
+        LinkedList<BrowserHistory> historyList = DB.getBrowserHistoryDates(true);
         while (true) {
-            StringBuilder sb = new StringBuilder(STR."Which date would you like to download?\{NL + NL}");
+            StringBuilder sb = new StringBuilder(STR."Which date would you like to see (A=ALL)?\{NL + NL}");
             int c = 0;
             for (BrowserHistory history : historyList) {
                 String date = history.getDate();
@@ -180,40 +226,38 @@ public class Actions {
                 sb.append(c).append(") ").append(date).append(STR." (\{count})").append(NL);
                 c++;
             }
-            int toggleFailed = c;
-            sb.append(toggleFailed).append(") Retry Failed Downloads: ").append(retryFailed).append(NL);
-            int exit = c + 10;
+            int exit = c + 1;
             sb.append(STR."\{exit}) QUIT\{NL}: ");
             System.out.print(sb);
-            int choice = new Scanner(System.in).nextInt();
-            System.out.println(" ");
-            if (choice == exit) {
-                break;
+            String usrChoice = new Scanner(System.in).nextLine();
+            if (usrChoice.toLowerCase().contains("a")) {
+                for (BrowserHistory history : historyList) {
+                    for (Link link : history.getLinkList()) {
+                        System.out.println(STR."\{link.getLink()}\{NL}");
+                    }
+                }
+                System.exit(0);
             }
-            else if (choice == toggleFailed)
-                retryFailed = !retryFailed;
             else {
-                BrowserHistory history = historyList.get(choice);
-                for (Link link : history.getLinkList()) {
-                    if (DB.addLink(link).equals(DUPLICATE_ENTRY)) {
-                        System.out.println(STR."Link already downloaded: \{link.getLink()}");
+                int choice = Integer.parseInt(usrChoice);
+                System.out.println(" ");
+                if (choice == exit) {
+                    break;
+                }
+                else {
+                    int count = historyList.size();
+                    if (choice >= 0 && choice < count) {
+                        BrowserHistory history = historyList.get(choice);
+                        for (Link link : history.getLinkList()) {
+                            System.out.println(STR."\{link.getLink()}\{NL}");
+                        }
+                        System.exit(0);
                     }
                     else {
-                        link.download(retryFailed);
-                    }
-                }
-                while (executor.getActiveCount() > 0) {
-                    sleep(200);
-                }
-                if (DownloadResults.haveFailures()) {
-                    System.out.println("Failures:");
-                    for (Link link : DownloadResults.getFailedList()) {
-                        System.out.println(STR."\t\{link.getLink()}");
+                        System.out.println(STR."\{NL}\tInvalid selection\{NL}");
                     }
                 }
             }
-            System.out.println("Hit Enter To Continue");
-            new Scanner(System.in).nextLine();
         }
     }
 

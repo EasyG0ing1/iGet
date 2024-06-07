@@ -19,17 +19,30 @@ Click on your operating system to see how to set up the build environment:
 
 ## First
 
+If you're in Windows:
+
+```bash
+mkdir C:\github
+cd C:\github
+```
+
+Mac/Linux:
+
+```bash
+mkdir ~/github
+cd ~/github
+```
+
 Clone the repository to your local drive:
 
 ```bash
 git clone https://github.com/EasyG0ing1/iget.git
-cd iget
 ```
 
 ### MacOS or Linux
 
 ```bash
-cd ~/github/iget/build/maclinux
+cd iget/build/maclinux
 chmod +x *.sh
 ./buildjar.sh
 ```
@@ -37,7 +50,7 @@ chmod +x *.sh
 ### Windows
 
 ```bash
-cd C:\github\iget\build\windows
+cd iget\build\windows
 buildjar.bat
 ```
 
@@ -92,12 +105,10 @@ You will then see it do things like updating `yt-dlp` ... give it some time.
 
 The next thing you should see will look like this:
 
-```bash
-Watching Clipboard - Ctrl+C to exit
-```
+> Watching Clipboard - Ctrl+C to exit
 
 And **THAT'S ALL YOU SHOULD SEE**. If you see a command prompt show up after that, then something went wrong. Open an
-issue and lets talk about it.
+issue and let's talk about it.
 
 Launch your browser and go to instagram.com and log into your Instagram account. Next, find a reel. If clicking on reel
 on the left side of the screen doesn't work for you, then just find a content creator and from their page, click on
@@ -106,17 +117,15 @@ Reels then click on one of their reels.
 After you've clicked on a reel, the video should pop up in your browser and start playing. We want the text in the URL
 field, so highlight all of that text, then RIGHT CLICK on it and select copy. The text should look something like this:
 
-```azure
-https://www.instagram.com/reel/C6RT4CKyl2O/
-```
+> `https://www.instagram.com/reel/C6RT4CKyl2O/`
+
 
 Once you copy it to your clipboard, you should see in the terminal something like this:
 
-```azure
-Watching Clipboard - Ctrl+C to exit
-Downloading: https://www.instagram.com/reel/C6RT4CKyl2O/?utm_source=ig_embed
-Success: https://www.instagram.com/reel/C6RT4CKyl2O/?utm_source=ig_embed
-```
+> Watching Clipboard - Ctrl+C to exit  
+> Downloading: https://www.instagram.com/reel/C6RT4CKyl2O/?utm_source=ig_embed  
+> Success: https://www.instagram.com/reel/C6RT4CKyl2O/?utm_source=ig_embed
+
 
 If the Downloading line doesn't show up right away for some reason, click on the Terminal window to make it active, then
 click on the web browser to make it active and copy the text to the clipboard again.
